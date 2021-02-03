@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>夕飯何がいい リゾルバー | iwashibowl.net</title>
+  <meta name="description" content="「夕飯何がいい？」に対する解をはじき出します。">
+
+  <meta property="og:title" content="夕飯何がいい リゾルバー">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://iwashibowl.net/tool/what_for_dinner/">
+  <meta property="og:description" content="「夕飯何がいい？」に対する解をはじき出します。">
+  <meta property="og:site_name" content="iwashibowl.net">
+  <meta property="og:image" content="https://iwashibowl.net/img/dinner_thumbnail.png">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="iwashibowl.net">
+  <meta name="twitter:creator" content="iwashi31">
+
+  <link rel="apple-touch-icon" href="favicon.png">
+
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/uikit.min.css" />
+  <link rel="stylesheet" href="css/main.css" />
+  <script src="js/uikit.min.js"></script>
+  <script src="js/uikit-icons.min.js"></script>
+</head>
+
+<body>
+<style>
+    html {
+        background-color: #f9f9f9;
+    }
+    nav {
+        background-image: url(/img/kamimizu_sisters.png);
+    }
+    h1 {
+        padding: 0.3em;
+        background-color: rgba(255, 255, 255, 0.9);
+        user-select: none;
+        cursor: pointer;
+    }
+    #app {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 2em;
+        width: 550px;
+    }
+    .icon-container img {
+        width: 120px;
+        height: 120px;
+        max-width: none;
+        position: relative;
+        z-index: 100;
+    }
+    .header-link:hover {
+        text-decoration: none;
+    }
+    .uk-tab > * > a {
+        font-size: 1.0em;
+    }
+    #block-tab-items li {
+        margin-top: 4px;
+    }
+    .uk-table td {
+        padding: 8px 12px;
+    }
+    .uk-checkbox {
+        margin-right: 4px;
+    }
+    label {
+        margin-right: 4px;
+        cursor: pointer;
+    }
+    h5 {
+        margin-bottom: 10px;
+    }
+    .update-history {
+        margin-top: 10px;
+    }
+    p {
+        margin: 0;
+    }
+    button {
+        width: 160px;
+    }
+    .mask-box {
+        background-color: #f9f9f9;
+        height: 36px;
+        width: 100%;
+        z-index: 100;
+        position: relative;
+    }
+    .ans-text {
+        font-size: 26px;
+        text-shadow: 1px 1px 3px pink;
+        position: relative;
+    }
+</style>
+<nav id="header-nav" class="uk-background-cover">
+  <a href="/" class="header-link">
+    <h1 id="button-header" class="uk-heading-medium uk-margin-remove">iwashibowl.net</h1>
+  </a>
+</nav>
+<div id="app">
+  <h3 style="text-align: center;">夕飯何がいい リゾルバー</h3>
+  <div>
+    <div style="text-align: center; margin: 60px 0;" v-show="answer">
+      <p style="font-size: 18px;">今日の夕飯は</p>
+      <div class="mask-box"></div>
+      <div style="line-height: 0px; height: 34px;">
+        <p id="answer-text" class="ans-text" style="top: -16px;"><a :href="recipeUrl" style="color: #666;" target="_blank">{{ answer }}</a></p>
+        <p id="prev-answer-text" class="ans-text" style="top: 17px;"><a :href="recipeUrl" style="color: #666;" target="_blank">{{ prevAnswer }}</a></p>
+      </div>
+      <div class="mask-box"></div>
+      <p style="font-size: 18px;">なんてどうですか？</p>
+    </div>
+    <div class="uk-flex uk-flex-between" style="user-select: none;">
+      <div>
+        <h5>ジャンル</h5>
+        <label><input class="uk-checkbox" type="checkbox" v-model="includeWa">和</label>
+        <label><input class="uk-checkbox" type="checkbox" v-model="includeYou">洋</label>
+        <label><input class="uk-checkbox" type="checkbox" v-model="includeChu">中</label>
+      </div>
+      <div>
+        <h5>手間</h5>
+        <label><input class="uk-checkbox" type="checkbox" v-model="includeJikkuri">じっくり</label>
+        <label><input class="uk-checkbox" type="checkbox" v-model="includeOtegaru">お手軽</label>
+      </div>
+      <div>
+        <button class="uk-button uk-button-default" style="margin-top: 8px;" @click="decide" v-if="!answer">夕飯何がいい？</button>
+        <button class="uk-button uk-button-default" style="margin-top: 8px;" @click="decide" v-if="answer">他のがいいな</button>
+      </div>
+    </div>
+  </div>
+  <div id="description-container" class="uk-margin-top uk-margin-large-bottom">
+    <ul uk-tab>
+      <li><a href="#">説明</a></li>
+      <li><a href="#">更新履歴</a></li>
+    </ul>
+    <div id="block-tab-items" class="uk-switcher">
+      <div>
+        <ul>
+          <li>「今日の夕飯何がいい？」に対する解をはじき出します。</li>
+          <li>料理名をクリックするとレシピを表示します。</li>
+        </ul>
+      </div>
+      <div class="uk-margin-left">
+        <h5 class="uk-margin-remove">ver 1.0 (2021/01/30)</h5>
+        <ul class="update-history">
+          <li>公開。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="dist/dinner.js"></script>
+</body>
+</html>
